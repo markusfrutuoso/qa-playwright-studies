@@ -12,8 +12,8 @@ test.describe.parallel('Login / Logout Flow', () => {
     await page.fill('#password', 'invalidpassword')
     await page.click('#login-button')
 
-    const errorMessage = page.getByRole('alert')
-    await expect(errorMessage).toContainText(
+    const loginError = page.getByRole('alert')
+    await expect(loginError).toContainText(
       'Epic sadface: Username and password do not match any user in this service',
     )
   })
