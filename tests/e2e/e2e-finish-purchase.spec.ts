@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { existsSync } from 'fs'
 
-test.describe.parallel('Fill All Checkout Information', () => {
+test.describe('Fill All Checkout Information', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://www.saucedemo.com/')
     await page.fill('#user-name', 'standard_user')

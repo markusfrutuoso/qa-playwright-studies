@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe
-  .parallel('Checkout, Remove and Continue Shopping from Cart', () => {
+test.describe('Checkout, Remove and Continue Shopping from Cart', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://www.saucedemo.com/')
     await page.fill('#user-name', 'standard_user')
