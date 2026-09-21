@@ -2,35 +2,57 @@ import { expect, Locator, Page } from '@playwright/test'
 
 export class ShoppingPage {
   readonly page: Page
-  readonly sauceBackpack: Locator
-  readonly sauceBikeLight: Locator
-  readonly sauceTshirt: Locator
-  readonly sauceJacket: Locator
-  readonly sauceOnesie: Locator
-  readonly testShirt: Locator
-  readonly cartHaveItems: Locator
-  readonly cartHaventItems: Locator
+  readonly addBackpack: Locator
+  readonly addBikeLight: Locator
+  readonly addTshirt: Locator
+  readonly addJacket: Locator
+  readonly addOnesie: Locator
+  readonly addtestShirt: Locator
+  readonly cartHasItems: Locator
+  readonly cartHasntItems: Locator
+  readonly removeBackpack: Locator
 
   constructor(page: Page) {
     this.page = page
-    this.sauceBackpack = page.locator('#add-to-cart-sauce-labs-backpack')
-    this.sauceBikeLight = page.locator('#add-to-cart-sauce-labs-bike-light')
-    this.sauceTshirt = page.locator('add-to-cart-sauce-labs-bolt-t-shirt')
-    this.sauceJacket = page.locator('#add-to-cart-sauce-labs-fleece-jacket')
-    this.sauceOnesie = page.locator('#add-to-cart-sauce-labs-onesie')
-    this.testShirt = page.locator(
+    this.addBackpack = page.locator('#add-to-cart-sauce-labs-backpack')
+    this.addBikeLight = page.locator('#add-to-cart-sauce-labs-bike-light')
+    this.addTshirt = page.locator('#add-to-cart-sauce-labs-bolt-t-shirt')
+    this.addJacket = page.locator('#add-to-cart-sauce-labs-fleece-jacket')
+    this.addOnesie = page.locator('#add-to-cart-sauce-labs-onesie')
+    this.addtestShirt = page.locator(
       '[data-test="add-to-cart-test.allthethings()-t-shirt-(red)"]',
     )
-    this.cartHaveItems = page
+    this.removeBackpack = page.locator('#remove-sauce-labs-backpack')
+    this.cartHasItems = page
       .locator('shopping_cart_container')
       .getByLabel('Cart, # items')
-    this.cartHaventItems = page
+    this.cartHasntItems = page
       .locator('shopping_cart_container')
       .getByLabel('Empty')
   }
 
   async addItem() {
-    await this.sauceBackpack.click()
-    await this.cartHaveItems
+    await this.addBackpack.click()
+  }
+
+  async removeItem() {
+    await this.removeBackpack.click()
+  }
+
+  async addMultipleItems() {
+    await this.addBackpack.click()
+    await this.addBikeLight.click()
+    await this.addTshirt.click()
+    await this.addJacket.click()
+    await this.addOnesie.click()
+    await this.addtestShirt.click()
+  }
+
+  async verifyCartHasItems() {
+    await this.cartHasItems
+  }
+
+  async verifyCartHasntItems() {
+    await this.cartHasntItems
   }
 }

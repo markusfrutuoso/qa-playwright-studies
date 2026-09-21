@@ -1,32 +1,37 @@
 import { test, expect } from '@playwright/test'
+import { HomePage } from '../../page-objects/HomePage'
+import { ShoppingPage } from '../../page-objects/ShoppingPage'
+import { LoginPage } from '../../page-objects/LoginPage'
+import { CartPage } from '../../page-objects/CartPage'
 
 test.describe('Checkout, Remove and Continue Shopping from Cart', () => {
+  let homePage: HomePage
+  let shoppingPage: ShoppingPage
+  let loginPage: LoginPage
+  let cartPage: CartPage
+
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/')
-    await page.fill('#user-name', 'standard_user')
-    await page.fill('#password', 'secret_sauce')
-    await page.click('#login-button')
-    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html')
-    await page.click('#add-to-cart-sauce-labs-backpack')
-    await page.click('#shopping_cart_container')
-    await expect(page).toHaveURL('https://www.saucedemo.com/cart.html')
+    homePage = new HomePage(page)
+    shoppingPage = new ShoppingPage(page)
+    loginPage = new LoginPage(page)
+    cartPage = new CartPage(page)
+
+    await homePage.visit()
+    await loginPage.login('standard_user', 'secret_sauce')
+    await shoppingPage.addItem()
+    await cartPage.gotoCartPage()
   })
 
   test('Remove an Item from Checkout Page', async ({ page }) => {
-    await page.click('#remove-sauce-labs-backpack')
-    const removedItem = page.locator('.inventory_item_name')
-    await expect(removedItem).not.toBeVisible()
+    await shoppingPage.removeItem()
+    await expect(page.locator('.inventory_item_name')).not.toBeVisible()
   })
 
-  test('Continue Shopping', async ({ page }) => {
-    await page.click('#continue-shopping')
-    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html')
+  test('Continue Shopping Button', async ({ page }) => {
+    await cartPage.continueShoppingButton()
   })
 
-  test('Checkout', async ({ page }) => {
-    await page.click('#checkout')
-    await expect(page).toHaveURL(
-      'https://www.saucedemo.com/checkout-step-one.html',
-    )
+  test('Checkout Button', async ({ page }) => {
+    await cartPage.checkoutButton()
   })
 })
