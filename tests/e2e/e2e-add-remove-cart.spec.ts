@@ -3,7 +3,7 @@ import { LoginPage } from '../../page-objects/LoginPage'
 import { ShoppingPage } from '../../page-objects/ShoppingPage'
 import { HomePage } from '../../page-objects/HomePage'
 
-test.describe.only('Add and Remove Items', () => {
+test.describe('Add and Remove Items', () => {
   let loginPage: LoginPage
   let homePage: HomePage
   let shoppingPage: ShoppingPage
