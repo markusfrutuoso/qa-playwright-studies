@@ -1,19 +1,29 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { HomePage } from '../../page-objects/HomePage'
 import { ShoppingPage } from '../../page-objects/ShoppingPage'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { CartPage } from '../../page-objects/CartPage'
+import { CheckoutInformationPage } from '../../page-objects/CheckoutInformationPage'
 
-test.describe.only('Fill All Checkout Information', () => {
+const validCheckoutInformation = {
+  firstName: 'First Name',
+  lastName: 'Last Name',
+  postalCode: '123456789',
+}
+
+test.describe('Fill All Checkout Information', () => {
   let homePage: HomePage
   let shoppingPage: ShoppingPage
   let loginPage: LoginPage
   let cartPage: CartPage
+  let checkoutInformationPage: CheckoutInformationPage
+
   test.beforeEach(async ({ page }) => {
     homePage = new HomePage(page)
     shoppingPage = new ShoppingPage(page)
     loginPage = new LoginPage(page)
     cartPage = new CartPage(page)
+    checkoutInformationPage = new CheckoutInformationPage(page)
 
     await homePage.visit()
     await loginPage.login('standard_user', 'secret_sauce')
@@ -22,66 +32,62 @@ test.describe.only('Fill All Checkout Information', () => {
     await cartPage.checkoutButton()
   })
 
-  test('All Information Empty', async ({ page }) => {
-    await page.fill('#first-name', '')
-    await page.fill('#last-name', '')
-    await page.fill('#postal-code', '')
-    await page.click('#continue')
-    const emptyInformation = page.getByRole('alert')
-    await expect(emptyInformation).toContainText(
+  test('All Information Empty', async () => {
+    await checkoutInformationPage.submitInformation('', '', '')
+    await checkoutInformationPage.assertRequiredFieldError(
       'Error: First Name is required',
     )
   })
-  test("Empty 'First Name'", async ({ page }) => {
-    await page.fill('#first-name', '')
-    await page.fill('#last-name', 'Last Name')
-    await page.fill('#postal-code', '123456789')
-    await page.click('#continue')
-    const emptyFirstName = page.getByRole('alert')
-    await expect(emptyFirstName).toContainText('Error: First Name is required')
+
+  test("Empty 'First Name'", async () => {
+    await checkoutInformationPage.submitInformation(
+      '',
+      validCheckoutInformation.lastName,
+      validCheckoutInformation.postalCode,
+    )
+    await checkoutInformationPage.assertRequiredFieldError(
+      'Error: First Name is required',
+    )
   })
 
-  test("Empty 'Last Name'", async ({ page }) => {
-    await page.fill('#first-name', 'First Name')
-    await page.fill('#last-name', '')
-    await page.fill('#postal-code', '123456789')
-    await page.click('#continue')
-    const emptyLastName = page.getByRole('alert')
-    await expect(emptyLastName).toContainText('Error: Last Name is required')
+  test("Empty 'Last Name'", async () => {
+    await checkoutInformationPage.submitInformation(
+      validCheckoutInformation.firstName,
+      '',
+      validCheckoutInformation.postalCode,
+    )
+    await checkoutInformationPage.assertRequiredFieldError(
+      'Error: Last Name is required',
+    )
   })
 
-  test("Empty 'Zip/Postal Code'", async ({ page }) => {
-    await page.fill('#first-name', 'First Name')
-    await page.fill('#last-name', 'Last Name')
-    await page.fill('#postal-code', '')
-    await page.click('#continue')
-    const emptyPostalCode = page.getByRole('alert')
-    await expect(emptyPostalCode).toContainText(
+  test("Empty 'Zip/Postal Code'", async () => {
+    await checkoutInformationPage.submitInformation(
+      validCheckoutInformation.firstName,
+      validCheckoutInformation.lastName,
+      '',
+    )
+    await checkoutInformationPage.assertRequiredFieldError(
       'Error: Postal Code is required',
     )
   })
 
-  test('All Valid Information', async ({ page }) => {
-    await page.fill('#first-name', 'First Name')
-    await page.fill('#last-name', 'Last Name')
-    await page.fill('#postal-code', '123456789')
-    await page.click('#continue')
-    await expect(page).toHaveURL(
-      'https://www.saucedemo.com/checkout-step-two.html',
+  test('All Valid Information', async () => {
+    await checkoutInformationPage.submitInformation(
+      validCheckoutInformation.firstName,
+      validCheckoutInformation.lastName,
+      validCheckoutInformation.postalCode,
     )
+    await checkoutInformationPage.assertOverviewPage()
   })
 
-  test('Finish the Order', async ({ page }) => {
-    await page.fill('#first-name', 'First Name')
-    await page.fill('#last-name', 'Last Name')
-    await page.fill('#postal-code', '123456789')
-    await page.click('#continue')
-    await expect(page).toHaveURL(
-      'https://www.saucedemo.com/checkout-step-two.html',
+  test('Finish the Order', async () => {
+    await checkoutInformationPage.submitInformation(
+      validCheckoutInformation.firstName,
+      validCheckoutInformation.lastName,
+      validCheckoutInformation.postalCode,
     )
-    await page.click('#finish')
-    await expect(page).toHaveURL(
-      'https://www.saucedemo.com/checkout-complete.html',
-    )
+    await checkoutInformationPage.assertOverviewPage()
+    await checkoutInformationPage.finishOrder()
   })
 })

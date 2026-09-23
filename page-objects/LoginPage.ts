@@ -1,5 +1,4 @@
 import { expect, Locator, Page } from '@playwright/test'
-import { LoadFnOutput } from 'node:module'
 
 export class LoginPage {
   readonly page: Page
@@ -7,7 +6,10 @@ export class LoginPage {
   readonly passwordInput: Locator
   readonly submitButton: Locator
   readonly loginError: Locator
-  readonly logoutSucess: Locator
+  readonly loginContainer: Locator
+  readonly loginForm: Locator
+  readonly menuButton: Locator
+  readonly logoutLink: Locator
 
   constructor(page: Page) {
     this.page = page
@@ -15,7 +17,10 @@ export class LoginPage {
     this.passwordInput = page.locator('#password')
     this.submitButton = page.locator('#login-button')
     this.loginError = page.getByRole('alert')
-    this.logoutSucess = page.locator('.login_container')
+    this.loginContainer = page.locator('.login_container')
+    this.loginForm = page.locator('form')
+    this.menuButton = page.locator('#react-burger-menu-btn')
+    this.logoutLink = page.locator('#logout_sidebar_link')
   }
 
   async login(username: string, password: string) {
@@ -25,15 +30,27 @@ export class LoginPage {
   }
 
   async logout() {
-    await this.page.click('#react-burger-menu-btn')
-    await this.page.click('#logout_sidebar_link')
-    await this.logoutSucess.click()
+    await this.menuButton.click()
+    await this.logoutLink.click()
     await expect(this.page).toHaveURL('https://www.saucedemo.com/')
+    await expect(this.loginContainer).toBeVisible()
   }
 
   async assertErrorMessage() {
     await expect(this.loginError).toContainText(
       'Epic sadface: Username and password do not match any user in this service',
     )
+  }
+
+  async snapshotLoginForm() {
+    await expect(this.loginForm).toHaveScreenshot('login-form.png', {
+      animations: 'disabled',
+    })
+  }
+
+  async snapshotErrorMessage() {
+    await expect(this.loginError).toHaveScreenshot('login-error.png', {
+      animations: 'disabled',
+    })
   }
 }

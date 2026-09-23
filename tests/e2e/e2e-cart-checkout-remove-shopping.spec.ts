@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { HomePage } from '../../page-objects/HomePage'
 import { ShoppingPage } from '../../page-objects/ShoppingPage'
 import { LoginPage } from '../../page-objects/LoginPage'
@@ -22,16 +22,16 @@ test.describe('Checkout, Remove and Continue Shopping from Cart', () => {
     await cartPage.gotoCartPage()
   })
 
-  test('Remove an Item from Checkout Page', async ({ page }) => {
+  test('Remove an Item from Checkout Page', async () => {
     await shoppingPage.removeItem()
-    await expect(page.locator('.inventory_item_name')).not.toBeVisible()
+    await cartPage.assertCartIsEmpty()
   })
 
-  test('Continue Shopping Button', async ({ page }) => {
+  test('Continue Shopping Button', async () => {
     await cartPage.continueShoppingButton()
   })
 
-  test('Checkout Button', async ({ page }) => {
+  test('Checkout Button', async () => {
     await cartPage.checkoutButton()
   })
 })

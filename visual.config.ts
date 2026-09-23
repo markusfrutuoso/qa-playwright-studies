@@ -3,16 +3,20 @@ import { PlaywrightTestConfig } from '@playwright/test'
 const config: PlaywrightTestConfig = {
   timeout: 60000,
   retries: 0,
-  testDir: 'tests/e2e',
+  testDir: 'tests/visual',
+  updateSnapshots: 'missing',
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.01,
+    },
+  },
   use: {
     headless: true,
     viewport: { width: 1280, height: 720 },
     actionTimeout: 15000,
-    navigationTimeout: 30000,
     ignoreHTTPSErrors: true,
-    video: 'retain-on-failure',
-    screenshot: 'only-on-failure',
-    trace: 'retain-on-failure',
+    video: 'off',
+    screenshot: 'off',
   },
   projects: [
     {
@@ -28,6 +32,11 @@ const config: PlaywrightTestConfig = {
       use: { browserName: 'webkit' },
     },
   ],
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: 'playwright-report/visual', open: 'never' }],
+  ],
+  outputDir: 'test-results/visual',
 }
 
 export default config

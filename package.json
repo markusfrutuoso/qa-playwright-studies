@@ -1,16 +1,27 @@
 {
   "name": "qa-playwright-study",
   "version": "1.0.0",
-  "description": "",
+  "description": "Playwright study project with E2E, API and visual regression tests",
   "license": "ISC",
   "author": "",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
+    "setup:browsers": "playwright install",
     "tests:chrome": "playwright test --config=playwright.config.ts --project=Chromium",
     "tests:firefox": "playwright test --config=playwright.config.ts --project=Firefox",
     "tests:webkit": "playwright test --config=playwright.config.ts --project=Webkit",
-    "tests:e2e": "playwright test --config=e2e.config.ts --project=Chromium"
+    "tests:e2e": "playwright test --config=e2e.config.ts --project=Chromium",
+    "tests:e2e:all": "playwright test --config=e2e.config.ts",
+    "tests:api": "playwright test --config=api.config.ts",
+    "tests:visual:chrome": "playwright test --config=visual.config.ts --project=Chromium",
+    "tests:visual:firefox": "playwright test --config=visual.config.ts --project=Firefox",
+    "tests:visual:webkit": "playwright test --config=visual.config.ts --project=Webkit",
+    "tests:visual:all": "playwright test --config=visual.config.ts",
+    "tests:visual:chrome:update": "playwright test --config=visual.config.ts --project=Chromium --update-snapshots=all",
+    "tests:visual:firefox:update": "playwright test --config=visual.config.ts --project=Firefox --update-snapshots=all",
+    "tests:visual:webkit:update": "playwright test --config=visual.config.ts --project=Webkit --update-snapshots=all",
+    "tests:all": "npm run tests:e2e:all && npm run tests:api && npm run tests:visual:all"
   },
   "dependencies": {
     "@playwright/test": "^1.63.0",

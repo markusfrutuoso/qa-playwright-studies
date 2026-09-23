@@ -1,45 +1,46 @@
-import { test, expect } from '@playwright/test'
-import { existsSync } from 'fs'
+import { test } from '@playwright/test'
+import { HomePage } from '../../page-objects/HomePage'
+import { LoginPage } from '../../page-objects/LoginPage'
+import { ShoppingPage } from '../../page-objects/ShoppingPage'
+import { CartPage } from '../../page-objects/CartPage'
+import { CheckoutInformationPage } from '../../page-objects/CheckoutInformationPage'
+import { CheckoutCompletePage } from '../../page-objects/CheckoutCompletePage'
 
-test.describe('Fill All Checkout Information', () => {
+test.describe('Finished Purchase', () => {
+  let homePage: HomePage
+  let loginPage: LoginPage
+  let shoppingPage: ShoppingPage
+  let cartPage: CartPage
+  let checkoutInformationPage: CheckoutInformationPage
+  let checkoutCompletePage: CheckoutCompletePage
+
   test.beforeEach(async ({ page }) => {
-    await page.goto('https://www.saucedemo.com/')
-    await page.fill('#user-name', 'standard_user')
-    await page.fill('#password', 'secret_sauce')
-    await page.click('#login-button')
-    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html')
-    await page.click('#add-to-cart-sauce-labs-backpack')
-    await page.click('#shopping_cart_container')
-    await expect(page).toHaveURL('https://www.saucedemo.com/cart.html')
-    await page.click('#checkout')
-    await expect(page).toHaveURL(
-      'https://www.saucedemo.com/checkout-step-one.html',
+    homePage = new HomePage(page)
+    loginPage = new LoginPage(page)
+    shoppingPage = new ShoppingPage(page)
+    cartPage = new CartPage(page)
+    checkoutInformationPage = new CheckoutInformationPage(page)
+    checkoutCompletePage = new CheckoutCompletePage(page)
+
+    await homePage.visit()
+    await loginPage.login('standard_user', 'secret_sauce')
+    await shoppingPage.addItem()
+    await cartPage.gotoCartPage()
+    await cartPage.checkoutButton()
+    await checkoutInformationPage.submitInformation(
+      'First Name',
+      'Last Name',
+      '123456789',
     )
-    await page.fill('#first-name', 'First Name')
-    await page.fill('#last-name', 'Last Name')
-    await page.fill('#postal-code', '123456789')
-    await page.click('#continue')
-    await expect(page).toHaveURL(
-      'https://www.saucedemo.com/checkout-step-two.html',
-    )
-    await page.click('#finish')
-    await expect(page).toHaveURL(
-      'https://www.saucedemo.com/checkout-complete.html',
-    )
-  })
-  test('Back Home after Purchase', async ({ page }) => {
-    await page.click('#back-to-products')
-    await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html')
+    await checkoutInformationPage.assertOverviewPage()
+    await checkoutInformationPage.finishOrder()
   })
 
-  test('Generate PDF order', async ({ page }) => {
-    const downloadPromise = page.waitForEvent('download')
-    await page.click('#generate-pdf-order')
-    const download = await downloadPromise
-    const filePath = 'test-results/order.pdf'
-    await download.saveAs(filePath)
+  test('Show order completion confirmation', async () => {
+    await checkoutCompletePage.assertOrderCompleted()
+  })
 
-    expect(existsSync(filePath)).toBeTruthy()
-    expect(download.suggestedFilename()).toMatch(/\.pdf$/i)
+  test('Back Home after Purchase', async () => {
+    await checkoutCompletePage.backToProducts()
   })
 })

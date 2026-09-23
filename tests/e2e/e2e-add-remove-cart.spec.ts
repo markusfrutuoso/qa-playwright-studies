@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test } from '@playwright/test'
 import { LoginPage } from '../../page-objects/LoginPage'
 import { ShoppingPage } from '../../page-objects/ShoppingPage'
 import { HomePage } from '../../page-objects/HomePage'
@@ -16,19 +16,19 @@ test.describe('Add and Remove Items', () => {
     await loginPage.login('standard_user', 'secret_sauce')
   })
 
-  test('Add an Item to the Cart', async ({ page }) => {
+  test('Add an Item to the Cart', async () => {
     await shoppingPage.addItem()
-    await shoppingPage.verifyCartHasItems()
+    await shoppingPage.verifyCartHasItems(1)
   })
 
-  test('Remove an Item from the Cart', async ({ page }) => {
+  test('Remove an Item from the Cart', async () => {
     await shoppingPage.addItem()
     await shoppingPage.removeItem()
     await shoppingPage.verifyCartHasntItems()
   })
 
-  test('Add Multiple Items to the cart', async ({ page }) => {
+  test('Add Multiple Items to the cart', async () => {
     await shoppingPage.addMultipleItems()
-    await shoppingPage.verifyCartHasItems()
+    await shoppingPage.verifyCartHasItems(6)
   })
 })
