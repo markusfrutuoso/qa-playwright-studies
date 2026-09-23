@@ -7,7 +7,7 @@
 
 Projeto de estudos em **Quality Assurance e automação de testes** utilizando **Playwright + TypeScript**.
 
-O objetivo deste repositório é praticar a construção de uma suíte de testes organizada e manutenível, cobrindo diferentes camadas de qualidade: **testes End-to-End (E2E), testes de API, regressão visual, cenários positivos e negativos, Page Object Model (POM), execução cross-browser e geração de evidências de falha**.
+O objetivo deste repositório é praticar a construção de uma suíte de testes organizada e manutenível, cobrindo diferentes camadas de qualidade: **testes End-to-End (E2E), testes de API, regressão visual, cenários positivos e negativos, Page Object Model (POM), execução cross-browser, documentação de cenários e geração de evidências de falha**.
 
 > Este é um projeto de aprendizado contínuo. Os cenários foram adaptados e expandidos durante os estudos de Playwright, TypeScript, automação de testes, IA e MCP.
 
@@ -18,6 +18,8 @@ O objetivo deste repositório é praticar a construção de uma suíte de testes
 Durante os estudos, o site originalmente utilizado em parte do material do curso apresentou problemas de SSL. Para continuar praticando os mesmos conceitos de automação em um ambiente funcional, os cenários web foram adaptados para o **SauceDemo**, uma aplicação de e-commerce destinada a testes.
 
 Para os testes de API, o projeto utiliza **DummyJSON**, permitindo praticar requisições HTTP, validação de respostas, autenticação e operações CRUD.
+
+Além da automação, os cenários foram documentados em uma planilha de testes contendo passos, resultados esperados, status de execução e rastreabilidade com os arquivos automatizados.
 
 ### Sistemas utilizados
 
@@ -44,6 +46,8 @@ Para os testes de API, o projeto utiliza **DummyJSON**, permitindo praticar requ
 - **Cross-browser testing**
 - **HTML reports**
 - **Screenshots, vídeos e traces em falhas**
+- **Documentação de cenários de teste**
+- **Rastreabilidade entre cenários e automação**
 - **Git e GitHub**
 
 ---
@@ -58,6 +62,36 @@ Atualmente a suíte possui **30 testes automatizados** distribuídos entre E2E, 
 | API | 8 | GET, POST, PUT, DELETE, autenticação e cenários de erro |
 | Visual Regression | 4 | Página de login, formulário, logo e mensagem de erro |
 | **Total** | **30** | **Web + API + Visual** |
+
+---
+
+## 📋 Documentação dos testes
+
+Além da automação, os cenários deste projeto foram documentados seguindo uma estrutura de planejamento e execução de testes.
+
+A documentação contém:
+
+- identificação e descrição dos cenários;
+- funcionalidade ou componente testado;
+- passos para execução;
+- resultados esperados;
+- status de execução (`OK`, `NOK` ou não executado);
+- referência ao arquivo automatizado correspondente;
+- consolidação dos resultados;
+- área destinada às evidências dos testes.
+
+Os cenários documentados contemplam as três suítes presentes neste repositório:
+
+| Suíte | Cenários documentados |
+| --- | ---: |
+| E2E | 18 |
+| API | 8 |
+| Visual Regression | 4 |
+| **Total** | **30** |
+
+📄 **[Visualizar documentação completa dos testes no Google Drive](https://drive.google.com/drive/folders/1gu9ojfiwOjIZ4N3kl7n2xpx1iS5twzdx?usp=drive_link)**
+
+> A documentação está disponibilizada em modo de leitura e faz parte das evidências e artefatos de QA deste projeto.
 
 ---
 
@@ -288,6 +322,8 @@ qa-playwright-studies/
 └── README.md
 ```
 
+A documentação funcional e os registros dos cenários de teste são mantidos separadamente no Google Drive para consulta.
+
 ---
 
 ## Configurações das suítes
@@ -309,7 +345,7 @@ playwright-report/
 ├── api/
 └── visual/
 
- test-results/
+test-results/
 ├── e2e/
 ├── api/
 └── visual/
@@ -327,7 +363,18 @@ screenshot: 'only-on-failure'
 trace: 'retain-on-failure'
 ```
 
-Isso facilita reproduzir o comportamento observado e entender em qual etapa o cenário falhou.
+Esses artefatos permitem analisar o comportamento observado, reproduzir problemas e identificar em qual etapa o cenário falhou.
+
+### Evidências disponíveis
+
+Dependendo do tipo de falha ou execução, o projeto pode gerar:
+
+- screenshots;
+- vídeos;
+- traces do Playwright;
+- screenshots de comparação visual;
+- HTML Reports;
+- resultados individuais das suítes.
 
 ---
 
@@ -466,7 +513,7 @@ Os relatórios permitem analisar status, duração e evidências relacionadas à
 
 ## Estratégia de qualidade aplicada
 
-O projeto busca ir além de simplesmente automatizar cliques. Os cenários foram organizados pensando em diferentes aspectos de qualidade:
+O projeto busca ir além de simplesmente automatizar cliques. Os cenários foram organizados pensando em diferentes aspectos de qualidade.
 
 ### Cenários positivos
 
@@ -492,6 +539,14 @@ Screenshots, vídeos, traces e relatórios HTML ajudam na investigação quando 
 
 A execução em Chromium, Firefox e WebKit amplia a cobertura de compatibilidade entre browsers.
 
+### Documentação
+
+Os cenários automatizados também possuem documentação estruturada, facilitando a compreensão do objetivo, passos e resultados esperados de cada teste.
+
+### Rastreabilidade
+
+A documentação relaciona os cenários de teste aos respectivos arquivos automatizados, permitindo acompanhar a correspondência entre planejamento e implementação.
+
 ---
 
 ## Boas práticas exercitadas
@@ -507,6 +562,8 @@ A execução em Chromium, Firefox e WebKit amplia a cobertura de compatibilidade
 - Coleta de evidências em falhas
 - Nomenclatura descritiva de cenários
 - Execução cross-browser
+- Documentação estruturada dos cenários de teste
+- Rastreabilidade entre documentação e testes automatizados
 - Versionamento com Git
 
 ---
@@ -522,6 +579,8 @@ Este projeto tem sido utilizado para consolidar conhecimentos de QA e automaçã
 - validação de aplicações tanto pela interface quanto pela API;
 - investigação de falhas utilizando traces, screenshots, vídeos e relatórios;
 - entendimento das particularidades de testes visuais e criação de baselines;
+- documentação e organização estruturada de cenários de teste;
+- rastreabilidade entre documentação e automação;
 - adaptação de cenários quando o ambiente originalmente utilizado para estudo não está disponível.
 
 ---
@@ -536,7 +595,8 @@ O repositório continuará evoluindo conforme os estudos de Quality Assurance e 
 - [ ] Novos testes de API e validações de contrato/schema
 - [ ] Testes de acessibilidade
 - [ ] Interceptação e mocking de requisições de rede
-- [ ] Documentação de casos de teste manuais e checklists de regressão
+- [x] Documentação dos cenários de teste e resultados de execução
+- [ ] Checklists de regressão manual
 - [ ] Exemplos de registro e documentação de bugs
 - [ ] Estudos de automação de testes utilizando IA
 - [ ] Exploração de MCP aplicado ao fluxo de QA e Playwright
@@ -564,4 +624,4 @@ O código deste repositório é utilizado como prática para adaptar, implementa
 
 ## Observação
 
-Este projeto possui finalidade educacional e de portfólio, com foco no desenvolvimento de habilidades em **Quality Assurance, automação de testes e engenharia de software**.
+Este projeto possui finalidade educacional e de portfólio, com foco no desenvolvimento de habilidades em **Quality Assurance, automação de testes, documentação de QA e engenharia de software**.
